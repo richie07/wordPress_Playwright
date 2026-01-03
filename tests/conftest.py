@@ -1,6 +1,28 @@
 import pytest
 import base64
 
+@pytest.fixture(scope="session")
+def browser_context_args(browser_context_args):
+    """
+    Configure the context to accept the maximized window size.
+    'no_viewport': True is required when using '--start-maximized'.
+    """
+    return {
+        **browser_context_args,
+        "no_viewport": True
+    }
+
+@pytest.fixture(scope="session")
+def browser_type_launch_args(browser_type_launch_args):
+    """
+    Launch arguments for the browser to start maximized (Chromium only).
+    """
+    return {
+        **browser_type_launch_args,
+        "devtools": False,
+        "args": ["--start-maximized"] + browser_type_launch_args.get("args", [])
+    }
+
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     """

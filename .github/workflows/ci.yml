@@ -1,9 +1,9 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, develop ]
 
 jobs:
   test:
@@ -27,12 +27,9 @@ jobs:
       run: playwright install --with-deps
       
     - name: Run Tests
-      # Headless mode is forced by overriding addopts or environment variable if needed
-      # Here we assume pytest.ini has --headed, but in CI we usually want headless.
-      # Playwright forces headless in Linux CI usually, but let's be explicit if needed.
-      # Also, we use --headless explicitly to override the --headed in .ini if necessary, 
-      # though command line args usually override config.
-      run: python -m pytest --headless
+      # Headless mode is forced by default in pytest.ini
+      # Using -n auto for parallel execution
+      run: python -m pytest -n auto
       
     - name: Upload Test Report
       if: always() # Run even if tests fail

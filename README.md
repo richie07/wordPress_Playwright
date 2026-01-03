@@ -43,8 +43,11 @@ python3 -m pytest
 ```
 
 ### Opciones útiles:
-- **Ver el navegador mientras corre**: Por defecto está configurado `--headed` en `pytest.ini`.
-- **Modo lento (Slowmo)**: Configurado a 500ms en `pytest.ini` para poder observar las acciones.
+- **Ver el navegador (Headed)**: Por defecto los tests corren en modo "Headless" (sin ventana). Para ver el navegador, usa `--headed`:
+  ```bash
+  python3 -m pytest --headed
+  ```
+- **Modo lento (Slowmo)**: Configurado a 500ms en `pytest.ini` para poder observar las acciones si usas `--headed`.
 
 ### Ejecución por etiquetas (Tags)
 Puedes filtrar qué tests ejecutar usando etiquetas (`@login`, `@user`).

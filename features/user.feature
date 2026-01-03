@@ -8,7 +8,7 @@ Feature: User Management
         Given I am logged in as Admin
         And I am on the Users page
         When I create a new user with username "newuser" and email "newuser@example.com"
-        Then the user "newuser2" should appear in the user list
+        Then the user "newuser" should appear in the user list
 
     Scenario: Delete a user
         Given I am logged in as Admin
