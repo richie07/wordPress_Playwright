@@ -1,0 +1,51 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Install Playwright Browsers
+      run: playwright install --with-deps
+      
+    - name: Run Tests
+      # Headless mode is forced by overriding addopts or environment variable if needed
+      # Here we assume pytest.ini has --headed, but in CI we usually want headless.
+      # Playwright forces headless in Linux CI usually, but let's be explicit if needed.
+      # Also, we use --headless explicitly to override the --headed in .ini if necessary, 
+      # though command line args usually override config.
+      run: python -m pytest --headless
+      
+    - name: Upload Test Report
+      if: always() # Run even if tests fail
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-report
+        path: report.html
+        retention-days: 30
+      
+    - name: Upload Logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: automation-logs
+        path: automation.log
+        retention-days: 30
